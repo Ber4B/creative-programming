@@ -1,49 +1,64 @@
-// NameSpace
-//var GAME = GAME || {};
+var GAME = GAME || {};
 
-function Character(){
-    this.pos = {x:100, y:100};
+function Object1(parent) {
+
+    this.parent = parent;
+
+    var _this = this;
+    window.addEventListener('keyup', function(e){
+        _this.keyHandler(e.keyCode);
+    });
+
+}
+Object1.prototype.keyHandler = function(key){
+    if (key == 39) this.parent.object2.move("right");
+    if (key == 37) this.parent.object2.move("left");
+};
+
+function Object2() {
+    this.pos = {x: document.getElementById('myCanvas').width/2,
+                y: document.getElementById('myCanvas').height/2};
 }
 
-Character.prototype.move = function(direction){
-    if(direction == 'left') this.pos.x -= 1;
-    if(direction == 'right') this.pos.x += 1;
-    console.log("MOVE " + player.pos.x, player.pos.y);
+Object2.prototype.move = function(dir) {
+    if (dir == "right") this.pos.x+=10;
+    if (dir == "left") this.pos.x-=10;
+};
+
+Object2.prototype.getCoords = function() {
+    return this.pos;
+};
+
+function Object3(parent) {
+    this.canvas = document.getElementById('myCanvas');
+    this.context = this.canvas.getContext('2d');
+    this.parent = parent;
 }
 
-function MandMeneer(){}
+Object3.prototype.draw = function() {
+    var pos = this.parent.object2.getCoords();
 
-MandMeneer.prototype = new Character();
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.beginPath();
+    this.context.rect(pos.x,pos.y,25,50);
+    this.context.fillStyle = "pink";
+    this.context.fill();
+};
 
-MandMeneer.prototype.jump = function(){
-    this.pos.y -= 1;
-    console.log("JUMP " + player.pos.x, player.pos.y);
+function Object4() {
+    this.object1 = new Object1(this);
+    this.object2 = new Object2();
+    this.object3 = new Object3(this);
+    this.update();
 }
 
-var player = new MandMeneer();
+Object4.prototype.update = function() {
+    this.object3.draw();
 
+    var _this = this;
+    window.requestAnimationFrame( function() {
+        _this.update()
+    });
+};
 
-	var keyMap = {37: false, 38: false, 39: false, 40: false};
-	document.addEventListener("keydown", keyDownToMap, false);
-
-	function keyDownToMap(e) {
-	var keyCode = e.keyCode;
-	  if (e.keyCode in keyMap) {
-			keyMap[e.keyCode] = true;
-			if (keyMap[39] && keyMap[40]) 									{ player.move('rightdown'); }
-			if (keyMap[39] && keyMap[38]) 									{ player.move('rightup'); }
-			if (keyMap[37] && keyMap[40]) 									{ player.move('leftdown'); }
-			if (keyMap[37] && keyMap[38]) 									{ player.move('leftup'); }
-			if (keyMap[37] && !keyMap[38] && !keyMap[39] && !keyMap[40]) 	{ player.move('left'); }
-			if (keyMap[38] && !keyMap[37] && !keyMap[39] && !keyMap[40]) 	{ player.jump('up'); }
-			if (keyMap[39] && !keyMap[37] && !keyMap[38] && !keyMap[40]) 	{ player.move('right'); }
-			if (keyMap[40] && !keyMap[37] && !keyMap[38] && !keyMap[39]) 	{ player.move('down'); }
-		}
-	}
-
-player.move();
-player.jump();
-
-console.log("kaas");
-
-
+var controller = new Object4();
