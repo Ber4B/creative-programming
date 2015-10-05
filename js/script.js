@@ -5,7 +5,7 @@ function Object1(parent) {
     this.parent = parent;
 
     var _this = this;
-    window.addEventListener('keyup', function(e){
+    window.addEventListener('keydown', function(e){
         _this.keyHandler(e.keyCode);
     });
 
