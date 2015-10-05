@@ -23,5 +23,6 @@ player.move();
 player.jump();
 
 console.log(player.pos.x, player.pos.y);
+console.log("kaas");
 
 
