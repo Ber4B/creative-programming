@@ -38,7 +38,6 @@ var player = new MandMeneer();
 			if (keyMap[38] && !keyMap[37] && !keyMap[39] && !keyMap[40]) 	{ player.jump('up'); }
 			if (keyMap[39] && !keyMap[37] && !keyMap[38] && !keyMap[40]) 	{ player.move('right'); }
 			if (keyMap[40] && !keyMap[37] && !keyMap[38] && !keyMap[39]) 	{ player.move('down'); }
-			player.move();
 		}
 	}
 
